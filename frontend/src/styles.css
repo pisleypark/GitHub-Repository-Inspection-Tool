@@ -1,0 +1,412 @@
+:root {
+  color: #202124;
+  background: #f7f8fa;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.app-shell {
+  min-height: 100vh;
+  padding: 32px 20px;
+}
+
+.workspace {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-end;
+  margin-bottom: 28px;
+}
+
+.app-header h1,
+.repo-summary h2 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+.app-header h1 {
+  font-size: 34px;
+  line-height: 1.15;
+}
+
+.header-copy {
+  max-width: 420px;
+  margin: 0;
+  color: #5f6368;
+  line-height: 1.7;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #0f766e;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.analyze-form {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.analyze-form label {
+  font-weight: 700;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.input-row input {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #c9ced6;
+  border-radius: 8px;
+  padding: 0 14px;
+  background: #fff;
+  color: #202124;
+}
+
+.input-row input:focus {
+  border-color: #0f766e;
+  outline: 3px solid rgba(15, 118, 110, 0.16);
+}
+
+.input-row button {
+  min-height: 46px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #1f4f8f;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.input-row button:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.status-line,
+.error-box,
+.empty-state,
+.progress-panel {
+  margin-top: 18px;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.status-line {
+  background: #eaf2ff;
+  color: #1f4f8f;
+  font-weight: 700;
+}
+
+.error-box {
+  border: 1px solid #f1b4b4;
+  background: #fff1f1;
+  color: #9f1c1c;
+}
+
+.empty-state {
+  border: 1px dashed #c9ced6;
+  background: #fff;
+}
+
+.empty-state h2,
+.empty-state p {
+  margin: 0;
+}
+
+.empty-state p {
+  margin-top: 8px;
+  color: #5f6368;
+}
+
+.progress-panel {
+  border: 1px solid #d9dde3;
+  background: #fff;
+}
+
+.progress-panel h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  letter-spacing: 0;
+}
+
+.progress-panel ol {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.progress-panel li {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.progress-panel li span {
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: #eff6f4;
+  color: #0f766e;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.progress-panel li strong {
+  min-width: 0;
+  color: #30343b;
+  overflow-wrap: anywhere;
+}
+
+.report-panel {
+  display: grid;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.repo-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: start;
+  border-top: 1px solid #d9dde3;
+  padding-top: 22px;
+}
+
+.repo-summary h2 {
+  font-size: 26px;
+}
+
+.repo-summary p {
+  max-width: 720px;
+  margin: 8px 0 0;
+  color: #5f6368;
+  line-height: 1.6;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(92px, 1fr));
+  gap: 10px;
+}
+
+.metric,
+.detail-item {
+  min-width: 0;
+  border: 1px solid #d9dde3;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fff;
+}
+
+.metric span,
+.detail-item span {
+  display: block;
+  color: #5f6368;
+  font-size: 12px;
+}
+
+.metric strong,
+.detail-item strong {
+  display: block;
+  margin-top: 6px;
+  overflow-wrap: anywhere;
+}
+
+.final-strip {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  border-left: 4px solid #0f766e;
+  padding: 12px 16px;
+  background: #fff;
+}
+
+.final-strip strong {
+  font-size: 34px;
+  line-height: 1;
+}
+
+.agent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.agent-card {
+  display: grid;
+  gap: 14px;
+  border: 1px solid #d9dde3;
+  border-radius: 8px;
+  padding: 16px;
+  background: #fff;
+}
+
+.agent-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+
+.agent-card h3,
+.text-list h4 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+.agent-card h3 {
+  font-size: 18px;
+}
+
+.score-badge {
+  min-width: 56px;
+  border-radius: 8px;
+  padding: 8px;
+  background: #eff6f4;
+  color: #0f766e;
+  text-align: center;
+}
+
+.score-badge span {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.score-badge small {
+  display: block;
+  margin-top: 3px;
+}
+
+.detail-grid,
+.dimension-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.dimension-row {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.list-columns {
+  display: grid;
+  gap: 12px;
+}
+
+.list-columns.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.text-list h4 {
+  font-size: 14px;
+  color: #30343b;
+}
+
+.text-list ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
+.text-list li,
+.text-list p,
+.summary {
+  color: #4c5563;
+  line-height: 1.55;
+}
+
+.text-list p,
+.summary {
+  margin: 8px 0 0;
+}
+
+@media (max-width: 860px) {
+  .app-header,
+  .repo-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .app-header {
+    align-items: start;
+  }
+
+  .metrics,
+  .agent-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    padding: 22px 14px;
+  }
+
+  .app-header h1 {
+    font-size: 28px;
+  }
+
+  .input-row,
+  .detail-grid,
+  .dimension-row,
+  .list-columns.two,
+  .progress-panel li {
+    grid-template-columns: 1fr;
+  }
+
+  .input-row button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,237 @@
+prompt1:
+我要做一个“GitHub 仓库体检工具”。
+
+请先完成后端第一版，使用 FastAPI。
+
+目标：
+用户传入一个公开 GitHub 仓库 URL，后端能解析 owner/repo，并通过 GitHub API 获取仓库信息。
+
+请实现：
+
+1. 创建 backend 项目结构：
+   backend/
+     app/
+       main.py
+       repo_parser.py
+       github_client.py
+     requirements.txt
+     .env.example
+
+2. main.py 提供 POST /analyze 接口，请求体：
+   {
+     "repo_url": "https://github.com/langchain-ai/langgraph"
+   }
+
+3. repo_parser.py 负责解析 GitHub URL：
+   输入 https://github.com/langchain-ai/langgraph
+   输出 owner=langchain-ai, repo=langgraph
+
+4. github_client.py 负责通过 GitHub REST API 获取：
+   - stars
+   - forks
+   - description
+   - default_branch
+   - updated_at
+   - language distribution
+   - README.md 内容
+   - 仓库目录树，最多保留前 300 个文件路径
+
+5. 把这些信息整理成 repo_context 返回。
+
+6. 支持环境变量 GITHUB_TOKEN。
+   如果没有 GITHUB_TOKEN，也允许访问公开仓库。
+
+7. 不要接入通义千问。
+   不要写前端。
+   不要写 Agent。
+
+先给我实现计划，等我确认后再写代码。
+
+
+
+
+prompt2
+
+继续在当前项目上开发。
+
+现在请接入通义千问，并实现三个 Agent。
+
+要求：
+
+1. 新增 backend/app/qwen_client.py
+   使用通义千问 OpenAI 兼容接口。
+   从环境变量 DASHSCOPE_API_KEY 读取 key。
+   默认模型使用 qwen-plus。
+   提供 call_qwen(messages, temperature=0.2) 函数。
+
+2. 新增 backend/app/agents.py，实现三个函数：
+
+   run_code_auditor(repo_context)
+   角色：代码审计 Agent。
+   根据目录结构、语言分布、配置文件、tests、CI、src 目录判断代码工程质量。
+   输出 JSON：
+   {
+     "score": 0-100,
+     "strengths": [],
+     "risks": [],
+     "suggestions": []
+   }
+
+   run_product_analyst(repo_context)
+   角色：产品价值 Agent。
+   根据 README、stars、forks、更新时间、项目描述判断 README 清晰度、实用价值、开源活跃度。
+   输出 JSON：
+   {
+     "score": 0-100,
+     "readme_clarity": "",
+     "open_source_activity": "",
+     "strengths": [],
+     "risks": [],
+     "suggestions": []
+   }
+
+   run_final_judge(repo_context, agent_a_result, agent_b_result)
+   角色：总分裁判 Agent。
+   根据前两个 Agent 的结果生成最终体检报告。
+   输出 JSON：
+   {
+     "final_score": 0-100,
+     "level": "A/B/C/D",
+     "summary": "",
+     "dimension_scores": {
+       "code_quality": 0,
+       "product_value": 0,
+       "activity": 0
+     },
+     "top_issues": [],
+     "top_suggestions": []
+   }
+
+3. 修改 POST /analyze：
+   执行顺序必须是：
+   - 解析 GitHub URL
+   - 获取 repo_context
+   - 调用 Agent A
+   - 调用 Agent B
+   - 调用 Agent C
+   - 返回完整结果
+
+4. 要求模型只能基于 repo_context 分析，不要编造没有提供的信息。
+
+5. 如果模型返回的不是合法 JSON，要做一次简单修复或返回清晰错误。
+
+6. 不要写前端。
+   不要写 SSE。
+
+7. 最后给我一个完整 curl 测试命令。
+
+先给我实现计划，等我确认后再写代码。
+
+
+prompt3:
+
+继续在当前项目上开发。
+
+现在请添加一个简单前端，用 React + Vite。
+
+目标：
+用户在网页输入 GitHub 仓库 URL，点击按钮后调用后端 POST /analyze，并展示体检报告。
+
+请实现：
+
+1. 创建 frontend 项目：
+   frontend/
+     src/
+       App.tsx
+       main.tsx
+       api.ts
+       components/
+         ReportPanel.tsx
+         AgentResultCard.tsx
+     package.json
+
+2. 页面包含：
+   - 一个输入框
+   - 一个“开始体检”按钮
+   - loading 状态
+   - 错误提示
+   - 最终报告展示区
+
+3. 展示内容包括：
+   - 仓库名称
+   - stars
+   - forks
+   - 主要语言
+   - Agent A 代码审计结果
+   - Agent B 产品价值结果
+   - Agent C 最终评分和建议
+
+4. 前端默认请求：
+   http://localhost:8000/analyze
+
+5. 允许通过 Vite proxy 或环境变量配置后端地址。
+
+6. 不要做 SSE。
+   先做普通请求版。
+
+
+先给我实现计划，等我确认后再写代码。
+
+
+
+prompt4:
+继续在当前项目上开发。
+
+现在请添加 SSE 流式分析接口，并补齐提交材料。
+
+目标：
+用户点击“开始体检”后，前端可以实时看到每个阶段的进度，而不是等全部分析完成。
+
+请实现：
+
+1. 后端新增 GET /analyze/stream 接口。
+   参数：
+   repo_url=https://github.com/langchain-ai/langgraph
+
+2. 使用 SSE 返回阶段性消息。
+
+3. 阶段至少包括：
+   - parsing_url：正在解析 GitHub URL
+   - fetching_github：正在获取 GitHub 仓库信息
+   - code_audit：Agent A 正在分析代码结构
+   - product_analysis：Agent B 正在分析 README 和产品价值
+   - final_judge：Agent C 正在生成最终评分
+   - done：完成
+   - error：失败
+
+4. 每个 SSE 消息返回 JSON，例如：
+   {
+     "stage": "code_audit",
+     "message": "Agent A 正在分析代码结构",
+     "data": null
+   }
+
+5. 前端改成优先使用 EventSource 调用 /analyze/stream。
+   页面上显示阶段进度列表。
+   最后展示完整报告。
+
+6. 保留原来的 POST /analyze，方便调试。
+
+7. 补充 README.md，包含：
+   - 项目介绍
+   - 技术栈
+   - 本地运行步骤
+   - 环境变量说明
+   - 后端接口说明
+   - 示例 GitHub URL
+   - 多 Agent 设计说明
+
+
+8. 最后检查：
+   - 后端能启动
+   - 前端能启动
+   - 普通 POST /analyze 能用
+   - SSE /analyze/stream 能用
+   - README 说明清楚
+
+先给我实现计划，等我确认后再写代码。
